@@ -6,7 +6,11 @@ import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class BookService {
 
-  constructor(@InjectModel(Book.name) private bookModel: mongoose.Model<Book>,) {}
+  constructor(@InjectModel(Book.name) private bookModel: mongoose.Model<Book>) {
+  }
 
-
+  async getAllBooks(): Promise<Book[]> {
+    const books = await this.bookModel.find();
+    return books;
+  }
 }
