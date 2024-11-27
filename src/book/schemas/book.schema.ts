@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { IsNotEmpty, MaxLength } from 'class-validator';
 
 export enum Category {
   ADVENTURE = 'Adventure',
@@ -11,7 +12,7 @@ export enum Category {
   timestamps: true,
 })
 export class Book {
-  @Prop()
+  @Prop({required: true})
   title: string;
 
   @Prop()
