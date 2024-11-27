@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Param } from '@nestjs/common';
 import { Book } from './schemas/book.schema';
 import mongoose from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
@@ -27,11 +27,16 @@ export class BookService {
     return book;
   }
 
-  async updateBook(id:string,book: Book): Promise<Book> {
-    const res = await this.bookModel.findByIdAndUpdate(id,book,{
+  async updateBook(id: string, book: Book): Promise<Book> {
+    const res = await this.bookModel.findByIdAndUpdate(id, book, {
       new: true,
       runValidators: true,
     });
+    return res;
+  }
+
+  async deleteBookById(id: string): Promise<Book> {
+    const res = await this.bookModel.findByIdAndDelete(id);
     return res;
   }
 }
