@@ -12,8 +12,4 @@ import { MongooseModule } from '@nestjs/mongoose';
 
 export class BookModule {
 
-
-
-
-
 }
