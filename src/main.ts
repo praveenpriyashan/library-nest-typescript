@@ -6,16 +6,11 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(
-    new ValidationPipe({
-      whitelist: true, // Remove unknown fields
-      forbidNonWhitelisted: true, // Reject unknown fields
-      transform: true, // Transform payloads into DTOs
-    }),
-  );
+  app.useGlobalPipes(new ValidationPipe());
 
   await app.listen(process.env.PORT ?? 3000).then(() => {
     console.log(`Server is running on port ${process.env.PORT}`);
   });
 }
+
 bootstrap();
