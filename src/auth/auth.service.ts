@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './schemas/user.schema';
 import mongoose, { Model } from 'mongoose';
@@ -10,18 +10,22 @@ import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>, private jwtService: JwtService) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>, private jwtService: JwtService) {
+  }
 
-  async signUp(signUpDto:SignupDto):Promise<{token:string}> {
+  async signUp(signUpDto: SignupDto): Promise<{ token: string }> {
     const { name, email, password } = signUpDto;
     const hashPassword = await bcrypt.hash(password, 10);
     const user = await this.userModel.create({ name, email, password: hashPassword });
-    const tokenPayload={id:user.id}
-    const token=this.jwtService.sign(tokenPayload)
-    return {token}
+    const tokenPayload = { id: user.id };
+    const token = this.jwtService.sign(tokenPayload);
+    return { token };
   }
 
-  // async login(loginDto:LoginDto):Promise<string>{
-  //
-  // }
+  async login(loginDto: LoginDto): Promise<string> {
+    const { email, password } = loginDto;
+    const user = await this.userModel.findOne({ email });
+    if (!user) throw new UnauthorizedException('Invalid email or password');
+    const isPasswordMatch = await bcrypt.compare(password, user.password);
+  }
 }
