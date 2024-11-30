@@ -22,14 +22,14 @@ export class AuthService {
     return { token };
   }
 
-  async login(loginDto: LoginDto): Promise<{token:string}> {
+  async login(loginDto: LoginDto): Promise<{ token: string }> {
     const { email, password } = loginDto;
     const user = await this.userModel.findOne({ email });
     if (!user) throw new UnauthorizedException('Invalid email or password');
     const isPasswordMatch = await bcrypt.compare(password, user.password);
-    if (!isPasswordMatch)throw new UnauthorizedException('Invalid password')
+    if (!isPasswordMatch) throw new UnauthorizedException('Invalid password');
     const tokenPayload = { id: user.id };
     const token = this.jwtService.sign(tokenPayload);
-    return{token}
+    return { token };
   }
 }
