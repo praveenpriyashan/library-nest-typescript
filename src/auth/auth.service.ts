@@ -10,13 +10,12 @@ import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(@InjectModel(User.name) private userModel: Model<User>, private jwtService: JwtService) {
-  }
+  constructor(@InjectModel(User.name) private userModel: Model<User>, private jwtService: JwtService) {}
 
   async signUp(signUpDto: SignupDto): Promise<{ token: string }> {
-    const { name, email, password } = signUpDto;
+    const { name, email, password,role } = signUpDto;
     const hashPassword = await bcrypt.hash(password, 10);
-    const user = await this.userModel.create({ name, email, password: hashPassword });
+    const user = await this.userModel.create({ name, email, password: hashPassword ,role});
     const tokenPayload = { id: user.id };
     const token = this.jwtService.sign(tokenPayload);
     return { token };
