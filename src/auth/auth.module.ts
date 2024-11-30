@@ -13,10 +13,10 @@ import { JwtStrategy } from './jwt.strategy';
   imports: [
     PassportModule.register({defaultStrategy:'jwt'}),
     JwtModule.registerAsync({
-     inject:[ConfigService],
+     inject:[ConfigService],         //inject the config module
        useFactory:(configService:ConfigService):Promise<JwtModuleOptions> | JwtModuleOptions => ({
          secret:configService.get<string>('JWT_SECRET'),
-         signOptions: { expiresIn: configService.get<string>('JWT_EXPIRE')},
+         signOptions: { expiresIn: configService.get<string|number>('JWT_EXPIRE')},
        })
     }),
     MongooseModule.forFeature([{ name: 'User', schema: UserSchema }])

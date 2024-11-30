@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsNotEmpty, MaxLength } from 'class-validator';
+import mongoose, { Schema as MongooseSchema } from 'mongoose';
+import { User } from '../../auth/schemas/user.schema';
 
 export enum Category {
   ADVENTURE = 'Adventure',
@@ -12,7 +13,7 @@ export enum Category {
   timestamps: true,
 })
 export class Book {
-  @Prop({required: true})
+  @Prop({ required: true })
   title: string;
 
   @Prop()
@@ -24,8 +25,11 @@ export class Book {
   @Prop()
   price: number;
 
-  @Prop()
+  @Prop({ enum: Category })
   category: Category;
+
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'User' })
+  user: User;
 }
 
 export const BookSchema = SchemaFactory.createForClass(Book);
