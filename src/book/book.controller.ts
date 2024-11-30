@@ -3,14 +3,19 @@ import { BookService } from './book.service';
 import { Book } from './schemas/book.schema';
 import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
-import {Query as ExpressQuery} from 'express-serve-static-core';
+import { Query as ExpressQuery } from 'express-serve-static-core';
 import { AuthGuard } from '@nestjs/passport';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/enums/role.enum';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Controller('books')
 export class BookController {
   constructor(private bookService: BookService) {}
 
   @Get()
+  @Roles(Role.Moderator,Role.Admin )
+  @UseGuards(AuthGuard(),RolesGuard)         //authentication and autherizations
   async getAllBooks(@Query() query:ExpressQuery): Promise<Book[]> {
     return this.bookService.getAllBooks(query);
   }
