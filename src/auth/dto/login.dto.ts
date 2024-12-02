@@ -9,6 +9,6 @@ export class LoginDto {
 
   @IsNotEmpty()
   @IsString()
-  @MinLength(3,{message:'Please enter a valid password'})
+  @MinLength(5,{message:'Please enter a valid password'})
   readonly password: string;
 }
