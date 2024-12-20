@@ -14,7 +14,7 @@ export class BookController {
   constructor(private bookService: BookService) {}
 
   @Get()
-  @Roles(Role.Moderator,Role.Admin )
+  @Roles(Role.Moderator,Role.Admin,Role.User )
   @UseGuards(AuthGuard(),RolesGuard)         //authentication and autherizations
   async getAllBooks(@Query() query:ExpressQuery): Promise<Book[]> {
     return this.bookService.getAllBooks(query);

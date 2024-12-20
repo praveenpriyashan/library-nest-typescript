@@ -9,11 +9,15 @@ import { User } from '../auth/schemas/user.schema';
 @Injectable()
 export class BookService {
 
-  constructor(@InjectModel(Book.name) private bookModel: mongoose.Model<Book>) {}
+  constructor(@InjectModel(Book.name) private bookModel: mongoose.Model<Book>) {
+  }
 
   async getAllBooks(query: Query): Promise<Book[]> {
+    const resPerPage = 2;
+    const currentPage = Number(query.page) || 1;
+    const skip = resPerPage * (currentPage - 1);
     const keyword = query.keyword ? { title: { $regex: query.keyword, $options: 'i' } } : {};
-    const books = await this.bookModel.find(keyword);
+    const books = await this.bookModel.find({...keyword}).limit(resPerPage).skip(skip);
     return books;
   }
 
@@ -25,8 +29,8 @@ export class BookService {
     return book;
   }
 
-  async createBook(book: Book,user:User): Promise<Book> {
-    const data=Object.assign(book,{user:user._id})       //book object ekata userId eka dagnnva.
+  async createBook(book: Book, user: User): Promise<Book> {
+    const data = Object.assign(book, { user: user._id });       //book object ekata userId eka dagnnva.
     const res = await this.bookModel.create(data);
     return res;
   }
