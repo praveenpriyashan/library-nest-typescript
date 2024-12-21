@@ -9,11 +9,13 @@ export class AuthController {
 
   @Post('signup')
   signUp(@Body() signupDto:SignupDto):Promise<{token:string}>{
+    console.log(' sign up method called in controller');
     return this.authService.signUp(signupDto);
   }
 
   @Post('login')
   login(@Body() loginDto:LoginDto):Promise<{token:string}>{
+    console.log('login method called in controller');
     return this.authService.login(loginDto);
   }
 }

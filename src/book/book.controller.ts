@@ -11,33 +11,39 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Controller('books')
 export class BookController {
-  constructor(private bookService: BookService) {}
+  constructor(private bookService: BookService) {
+  }
 
   @Get()
-  @Roles(Role.Moderator,Role.Admin,Role.User )
-  @UseGuards(AuthGuard(),RolesGuard)         //authentication and autherizations
-  async getAllBooks(@Query() query:ExpressQuery): Promise<Book[]> {
+  @Roles(Role.Moderator, Role.Admin, Role.User)
+  @UseGuards(AuthGuard(), RolesGuard)         //authentication and autherizations
+  async getAllBooks(@Query() query: ExpressQuery): Promise<Book[]> {
+    console.log(' getAllBooks method in the controller');
     return this.bookService.getAllBooks(query);
   }
 
   @Get(':id')
-  async getBookById(@Param('id')id:string): Promise<Book> {
-    return this.bookService.findById(id)
+  async getBookById(@Param('id') id: string): Promise<Book> {
+    console.log(' getBookById method in the controller');
+    return this.bookService.findById(id);
   }
 
   @Post()
   @UseGuards(AuthGuard())
-  async createBooks(@Body() book:CreateBookDto,@Req() req): Promise<Book> {   //ena req eken token eka argena eken token eka argena eken user va gannva.
-    return this.bookService.createBook(book,req.user);
+  async createBooks(@Body() book: CreateBookDto, @Req() req): Promise<Book> {   //ena req eken token eka argena eken token eka argena eken user va gannva.
+    console.log(' createBooks method in the controller');
+    return this.bookService.createBook(book, req.user);
   }
 
   @Put(':id')
-  async updateBooks (@Param('id')id:string,@Body() updateBookDto:UpdateBookDto): Promise<Book> {
-    return this.bookService.updateBook(id,updateBookDto);
+  async updateBooks(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto): Promise<Book> {
+    console.log(' updateBooks method in the controller');
+    return this.bookService.updateBook(id, updateBookDto);
   }
 
   @Delete(':id')
-  async deleteBooks (@Param('id')id:string): Promise<Book> {
-    return this.bookService.deleteBookById(id)
+  async deleteBooks(@Param('id') id: string): Promise<Book> {
+    console.log(' deleteBooks method in the controller');
+    return this.bookService.deleteBookById(id);
   }
 }
