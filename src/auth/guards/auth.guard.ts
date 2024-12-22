@@ -7,7 +7,7 @@ import mongoose, { Model } from 'mongoose';
 
 @Injectable()
 export class AuthGuardd implements CanActivate {      //AthGuardd kiyala nama demme passportJwt eket e namama thiayaa hinda
-  constructor(private readonly jwtService: JwtService) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>,private readonly jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
@@ -32,11 +32,15 @@ export class AuthGuardd implements CanActivate {      //AthGuardd kiyala nama de
 
     // Verify the JWT token
     try {
-      const user = await this.jwtService.verifyAsync(token);
-      if (!user){
+      const payload = await this.jwtService.verifyAsync(token);
+      if (!payload){
         throw new UnauthorizedException('Token validation failed')
       };
-      console.log(`User:${user.email}`)
+      console.log('payload hear')
+      const { id } = payload;
+      console.log(`id ${id}`)
+      const user = await this.userModel.findById(id);
+
       request['user'] = user; // Attach user info to the request
       console.log('end the authguardd')
       return true;
