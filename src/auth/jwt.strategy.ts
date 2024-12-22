@@ -15,9 +15,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       secretOrKey: process.env.JWT_SECRET,
     });
+    console.log('constructor in the JwtStrategy')
   }
 
   async validate(payload) {
+    console.log('validate fuction')
     const { id } = payload;
     const user = await this.userModel.findById(id);
     if (!user) throw new UnauthorizedException('login first to access this end point')
