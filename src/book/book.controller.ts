@@ -8,6 +8,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../auth/enums/role.enum';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { AuthGuardd } from '../auth/guards/auth.guard';
 
 @Controller('books')
 export class BookController {
@@ -15,8 +16,9 @@ export class BookController {
   }
 
   @Get()
-  @Roles(Role.Moderator, Role.Admin, Role.User)
-  @UseGuards(AuthGuard(), RolesGuard)         //authentication and autherizations
+  @Roles(Role.Admin, Role.User)
+  // @UseGuards(AuthGuard(), RolesGuard)         //authentication and autherizations
+  @UseGuards(AuthGuardd,RolesGuard)         //authentication and autherizations
   async getAllBooks(@Query() query: ExpressQuery): Promise<Book[]> {
     console.log(' getAllBooks method in the controller');
     return this.bookService.getAllBooks(query);
