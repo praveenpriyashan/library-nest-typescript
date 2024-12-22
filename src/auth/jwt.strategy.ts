@@ -7,7 +7,7 @@ import { Model } from 'mongoose';
 import * as process from 'process';
 
 
-// this is for any incomming requests check the token
+// this is for any incomming requests check the token (any req with the token,not the manula token.only for passport token)
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {
